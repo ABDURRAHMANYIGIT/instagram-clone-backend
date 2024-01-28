@@ -12,6 +12,14 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+
+        // Set a default value for profile_photo
+        $this->attributes['profile_photo'] = 'default.jpg';
+    }
+
     /**
      * The attributes that are mass assignable.
      *
@@ -21,6 +29,12 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'nickname',
+        'biography',
+        'profile_photo',
+        'followers',
+        'posts',
+        'followings',
     ];
 
     /**

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
@@ -38,6 +39,7 @@ class AuthController extends Controller
         $user = User::where('email', $request->email)->first();
         if ($user) {
             if (Hash::check($request->password, $user->password)) {
+                Auth::login($user);
                 $token = $user->createToken('Laravel Password Grant Client')->plainTextToken;
                 $response = ['token' => $token];
                 return response($response, 200);
@@ -50,5 +52,16 @@ class AuthController extends Controller
             return response($response, 422);
         }
     }
+
+    public function getAuthUser()
+    {
+        if (Auth::check()) {
+            $user = Auth::user();            
+            return $user;
+        } else {
+            return response()->json(['error' => 'Unauthenticated'], 401);
+        }
+    }
+    
 
 }
