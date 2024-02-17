@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -26,4 +27,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('user', [AuthController::class, 'getAuthUser']);
     Route::post('post/create', [PostController::class, 'store']);
     Route::get('post/{post_id}', [PostController::class, 'show']);
+    Route::post('user/follow-user/{user_id}', [UserController::class, 'followUser']);
+    Route::get('user/get-my-followings', [UserController::class, 'getMyFollowings']);
+    Route::get('user/get-my-followers', [UserController::class, 'getMyFollowers']);
 });
