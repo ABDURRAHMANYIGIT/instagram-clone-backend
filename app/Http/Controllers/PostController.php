@@ -15,7 +15,28 @@ class PostController extends Controller
      */
     public function index()
     {
-        //
+        $posts = Post::paginate(10);
+
+        $formattedPosts = [];
+
+        foreach ($posts as $post) {
+            $formattedPost = [
+                'id' => $post->id,
+                'description' => $post->description,
+                'image' => asset('storage/post_images/' . basename($post->image)),
+                'user_id' => $post->user_id,
+                'created_at' => $post->created_at,
+                'updated_at' => $post->updated_at,
+            ];
+    
+            $formattedPosts[] = $formattedPost;
+        }
+    
+        // Update the image URL in the pagination data
+        $paginationData = $posts->toArray();
+        $paginationData['data'] = $formattedPosts;
+    
+        return $paginationData;    
     }
 
     /**
