@@ -57,7 +57,7 @@ class AuthController extends Controller
     {
         if (Auth::check()) {
             $user = Auth::user();            
-            return $user;
+            return response()->json(['data' => $user]);
         } else {
             return response()->json(['error' => 'Unauthenticated'], 401);
         }
