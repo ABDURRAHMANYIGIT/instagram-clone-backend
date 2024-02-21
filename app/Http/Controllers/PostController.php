@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\PostResource;
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
@@ -20,11 +22,12 @@ class PostController extends Controller
         $formattedPosts = [];
 
         foreach ($posts as $post) {
+            $user = User::findorfail($post->user_id);
             $formattedPost = [
                 'id' => $post->id,
                 'description' => $post->description,
                 'image' => asset('storage/post_images/' . basename($post->image)),
-                'user_id' => $post->user_id,
+                'user' => '',
                 'created_at' => $post->created_at,
                 'updated_at' => $post->updated_at,
             ];
@@ -36,7 +39,7 @@ class PostController extends Controller
         $paginationData = $posts->toArray();
         $paginationData['data'] = $formattedPosts;
     
-        return $paginationData;    
+        return PostResource::collection($posts);
     }
 
     /**

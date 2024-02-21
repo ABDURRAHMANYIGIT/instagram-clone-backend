@@ -19,7 +19,7 @@ class User extends Authenticatable
         parent::__construct($attributes);
 
         // Set a default value for profile_photo
-        $this->attributes['profile_photo'] = 'default.jpg';
+        $this->attributes['profile_photo'] = 'default_user_image.png';
     }
 
     public function posts(): HasMany
