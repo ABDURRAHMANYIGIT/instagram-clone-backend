@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -57,7 +58,7 @@ class AuthController extends Controller
     {
         if (Auth::check()) {
             $user = Auth::user();            
-            return response()->json(['data' => $user]);
+            return response()->json(['data' => new UserResource($user)]);
         } else {
             return response()->json(['error' => 'Unauthenticated'], 401);
         }
