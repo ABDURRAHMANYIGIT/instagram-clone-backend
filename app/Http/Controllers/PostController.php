@@ -12,33 +12,33 @@ use Illuminate\Support\Facades\Validator;
 
 class PostController extends Controller
 {
+
+    public function like($postId)
+{
+    $post = Post::find($postId);
+
+    if (!$post) {
+        return response()->json(['message' => 'Post not found'], 404);
+    }
+
+    Auth::user()->likes()->toggle($post);
+
+    if (Auth::user()->likes()->where('post_id', $post->id)->exists()) {
+        return response()->json([
+            'message' => "User liked the post successfully",
+        ], 200);
+    } else {
+        return response()->json([
+            'message' => "User disliked the post",
+        ], 200);
+    }
+}
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
         $posts = Post::paginate(10);
-
-        $formattedPosts = [];
-
-        foreach ($posts as $post) {
-            $user = User::findorfail($post->user_id);
-            $formattedPost = [
-                'id' => $post->id,
-                'description' => $post->description,
-                'image' => asset('storage/post_images/' . basename($post->image)),
-                'user' => '',
-                'created_at' => $post->created_at,
-                'updated_at' => $post->updated_at,
-            ];
-    
-            $formattedPosts[] = $formattedPost;
-        }
-    
-        // Update the image URL in the pagination data
-        $paginationData = $posts->toArray();
-        $paginationData['data'] = $formattedPosts;
-    
         return PostResource::collection($posts);
     }
 

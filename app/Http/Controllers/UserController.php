@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\PostResource;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -36,7 +37,27 @@ class UserController extends Controller
         return response()->json(['data' => $followings]);
     }
 
-    public function getMyFollowers(){
+    public function getLikedPosts()
+    {
+        $likedPosts = auth()->user()->likes()->paginate(15);
+
+        return PostResource::collection($likedPosts);
+    }
+
+    public function getLikedPostIds()
+    {
+        $likedPostIds = auth()->user()->likes()->pluck('post_id')->toArray();
+
+        return response()->json(
+            [
+                'data' => $likedPostIds
+            ],
+            200
+        );
+    }
+
+    public function getMyFollowers()
+    {
         $followers = auth()->user()->followers()->get();
 
         return response()->json(['data' => $followers]);
