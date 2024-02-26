@@ -57,7 +57,7 @@ class PostController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'description' => 'required|string|max:255',
+                'description' => 'string|max:255',
                 'image' => 'required|file|image|mimes:jpeg,png,jpg|max:5000',
             ]
         );
@@ -75,7 +75,9 @@ class PostController extends Controller
         $post->image = $imagePath;
 
         $post->save();
-        return response('Post Created Succesfully!', 200);
+        return response()->json([
+            'message' => "Post created succesfully",
+        ], 200);;
     }
 
     /**
