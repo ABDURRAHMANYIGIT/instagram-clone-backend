@@ -47,6 +47,54 @@ class User extends Authenticatable
         return $this->belongsToMany(Post::class, 'likes')->withTimestamps();
     }
 
+    public function getFollowers()
+    {
+        return $this->followers()->get();
+    }
+
+    public function getFollowings()
+    {
+        return $this->followings()->get();
+    }
+
+    public function getPosts(){
+        return $this->posts()->get();
+    }
+
+    public function toggleUserFollowing(string $id){
+        $userToToggle = User::find($id);
+    
+        if (!$userToToggle) {
+            return [
+                'success' => false,
+                'message' => 'User does not exist!'
+            ];
+        }
+    
+        if (auth()->id() == $userToToggle->id) {
+            return [
+                'success' => false,
+                'message' => 'Cannot follow yourself'
+            ];
+        }
+    
+        $userFollowings = $this->followings();
+
+        $userFollowings->toggle($userToToggle);
+
+        if ( $userFollowings->where('user_id', $userToToggle->id)->exists()) {
+            return [
+                'success' => true,
+                'message' => 'User followed successfully'
+            ];
+        } else {
+            return [
+                'success' => true,
+                'message' => 'User unfollowed successfully'
+            ];
+        }
+    }
+
     /**
      * The attributes that are mass assignable.
      *

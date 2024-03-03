@@ -9,32 +9,21 @@ use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
-    public function followUser(string $id)
+    public function toggleFollowUser(string $id)
     {
-        $userToFollow = User::find($id);
+        $result = auth()->user()->toggleUserFollowing($id);
 
-        if (!$userToFollow) {
-            return response()->json(['error' => 'User not found'], 404);
+        if ($result['success']) {
+            return response(['result' => true, 'message' => $result['message']], 200);
+        } else {
+            return response(['result' => false, 'message' => $result['message']], 400);
         }
-
-        if (auth()->id() == $userToFollow->id) {
-            return response()->json(['error' => 'Cannot follow yourself'], 400);
-        }
-
-        if (auth()->user()->followings()->where('follower_id', $userToFollow->id)->exists()) {
-            return response()->json(['error' => 'User is already being followed'], 400);
-        }
-
-        auth()->user()->followings()->attach($userToFollow);
-
-        return response()->json(['message' => 'User followed successfully']);
     }
+    
 
     public function getMyFollowings()
     {
-        $followings = auth()->user()->followings()->get();
-
-        return response()->json(['data' => $followings]);
+        return response()->json(['data' => auth()->user()->getFollowings()]);
     }
 
     public function getLikedPosts()
@@ -58,8 +47,6 @@ class UserController extends Controller
 
     public function getMyFollowers()
     {
-        $followers = auth()->user()->followers()->get();
-
-        return response()->json(['data' => $followers]);
+        return response()->json(['data' =>  auth()->user()->getFollowers()]);
     }
 }

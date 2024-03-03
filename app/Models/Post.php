@@ -20,6 +20,24 @@ class Post extends Model
         return $this->belongsToMany(User::class, 'likes')->withTimestamps();
     }
 
-    protected $fillable = ['description', 'image'];
+    public function likePost(string $postId)
+    {
+        $post = Post::find($postId);
 
+        auth()->user()->likes()->toggle($post);
+
+        if (auth()->user()->likes()->where('post_id', $post->id)->exists()) {
+            return [
+                'success' => true,
+                'message' => 'User liked the post successfully'
+            ];
+        } else {
+            return [
+                'success' => true,
+                'message' => 'User unliked the post successfully'
+            ];
+        }
+    }
+
+    protected $fillable = ['description', 'image'];
 }

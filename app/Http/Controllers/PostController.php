@@ -14,25 +14,19 @@ class PostController extends Controller
 {
 
     public function like($postId)
-{
-    $post = Post::find($postId);
+    {
+        $post = Post::find($postId);
 
-    if (!$post) {
-        return response()->json(['message' => 'Post not found'], 404);
-    }
+        if (!$post) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Post not found'
+            ], 404);
+        }
 
-    Auth::user()->likes()->toggle($post);
+        $result = $post->likePost($postId);
 
-    if (Auth::user()->likes()->where('post_id', $post->id)->exists()) {
-        return response()->json([
-            'message' => "User liked the post successfully",
-        ], 200);
-    } else {
-        return response()->json([
-            'message' => "User disliked the post",
-        ], 200);
-    }
-}
+        return response()->json($result);    }
     /**
      * Display a listing of the resource.
      */
