@@ -22,7 +22,6 @@ class UserResource extends JsonResource
             'profile_photo' => $this->getProfilePhotoUrlAttribute(),
             'followers' => $this->mapUserCollection($this->getFollowers()),
             'followings' => $this->mapUserCollection($this->getFollowings()),
-            'posts' => $this->mapUserPosts($this),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];
@@ -35,17 +34,6 @@ class UserResource extends JsonResource
                 'id' => $user->id,
                 'name' => $user->name,
                 'profile_photo' => $user->getProfilePhotoUrlAttribute(),
-            ];
-        });
-    }
-
-    protected function mapUserPosts($user)
-    {
-        return $user->posts->map(function ($post) {
-            return [
-                'id' => $post->id,
-                'description' => $post->description,
-                'image' => asset('storage/post_images/' . basename($post->image)),
             ];
         });
     }

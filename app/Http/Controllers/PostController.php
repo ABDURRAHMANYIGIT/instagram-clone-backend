@@ -13,6 +13,10 @@ use Illuminate\Support\Facades\Validator;
 class PostController extends Controller
 {
 
+    public function getMyPosts(){
+        return PostResource::collection(auth()->user()->getPosts());
+    }
+
     public function like($postId)
     {
         $post = Post::find($postId);
