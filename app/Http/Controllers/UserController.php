@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\PostResource;
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -48,5 +49,11 @@ class UserController extends Controller
     public function getMyFollowers()
     {
         return response()->json(['data' =>  auth()->user()->getFollowers()]);
+    }
+
+    public function getUser(string $id){
+        $user = User::findOrFail($id);
+
+        return new UserResource($user);
     }
 }

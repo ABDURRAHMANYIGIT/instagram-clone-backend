@@ -17,6 +17,12 @@ class PostController extends Controller
         return PostResource::collection(auth()->user()->getPosts());
     }
 
+    public function getUsersPosts(string $id){
+        $user = User::findOrFail($id);
+
+        return PostResource::collection($user->getPosts());
+    }
+
     public function like($postId)
     {
         $post = Post::find($postId);
