@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Post;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -14,6 +16,8 @@ class UserFactory extends Factory
     /**
      * The current password being used by the factory.
      */
+    protected $model = User::class;
+
     protected static ?string $password;
 
     /**
@@ -30,6 +34,13 @@ class UserFactory extends Factory
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
         ];
+    }
+
+    public function configure(): UserFactory
+    {
+        return $this->afterCreating(function (User $user) {
+            $user->posts()->saveMany(Post::factory()->count(5)->make());
+        });
     }
 
     /**

@@ -2,13 +2,21 @@
 
 namespace App\Models;
 
+use Database\Factories\PostFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\Factory;
+
 
 class Post extends Model
 {
     use HasFactory;
+
+    protected static function newFactory(): Factory
+    {
+        return PostFactory::new();
+    }
 
     public function user(): BelongsTo
     {
