@@ -42,7 +42,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::inRandomOrder('id')->paginate(10);
+        $posts = Post::inRandomOrder('id')->paginate(15);
         return PostResource::collection($posts);
     }
 
