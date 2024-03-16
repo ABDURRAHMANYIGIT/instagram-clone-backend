@@ -33,8 +33,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('posts/get-my-posts', [PostController::class, 'getMyPosts']);
     Route::get('posts/get-users-posts/{user_id}', [PostController::class, 'getUsersPosts']);
     Route::post('user/follow-user/{user_id}', [UserController::class, 'toggleFollowUser']);
-    Route::get('user/get-my-followings', [UserController::class, 'getMyFollowings']);
-    Route::get('user/get-my-followers', [UserController::class, 'getMyFollowers']);
-    Route::get('user/get-liked-posts', [UserController::class, 'getLikedPosts']);
-    Route::get('user/get-liked-post-ids', [UserController::class, 'getLikedPostIds']);
+    Route::get('get-my-followings', [UserController::class, 'getMyFollowings']);
+    Route::get('get-my-followers', [UserController::class, 'getMyFollowers']);
+    Route::get('get-liked-posts', [UserController::class, 'getLikedPosts']);
+    Route::get('get-liked-post-ids', [UserController::class, 'getLikedPostIds']);
 });
